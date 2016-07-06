@@ -3,14 +3,11 @@ Countdown program to Slack hook
 
 [![Requirements Status](https://requires.io/github/esplorio/slack-countdown/requirements.svg?branch=master)](https://requires.io/github/esplorio/slack-countdown/requirements/?branch=master)
 [![Code Climate](https://codeclimate.com/github/esplorio/slack-countdown/badges/gpa.svg)](https://codeclimate.com/github/esplorio/slack-countdown)
+## Background
 
 Receive notifications daily about an incoming deadline.
 
-## Background
-
-We built this in the run up to TC Disrupt SF 2015 to light a giant fire under our arses.
-
-![tc-disrupt](https://s3-eu-west-1.amazonaws.com/generic-assets.esplor.io/images_on_web/TC_Disrupt_Slack_Countdown_Hook.png)
+- Modified from <a href="https://github.com/esplorio/slack-countdown">https://github.com/esplorio/slack-countdown</a> to allow countdown of weekdays to date instead of total days.
 
 ## Setup
 
@@ -24,7 +21,7 @@ A prerequisite is that you have a Heroku account and have added a method of paym
 
 2. Press this button to create a new Heroku app:
 
-    <a href="https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fesplorio%2Fslack-countdown%2Ftree%2Fmaster" target="_blank">
+    <a href="https://dashboard.heroku.com/new?template=https%3A%2F%2Fgithub.com%2Fjmbrunskill%2Fslack-countdown%2Ftree%2Fmaster" target="_blank">
         <img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy">
     </a>
 
@@ -44,11 +41,15 @@ A prerequisite is that you have a Heroku account and have added a method of paym
                             Specify the deadline in ISO format: yyyy-mm-dd
       -e EVENT, --event=EVENT
                             Name of the deadline event
+
+      -w=True, --weekdays=True
+                            Count down using weekdays instead of all days
     ```
     i.e.
     If the date today is the 16th July 2015 then
     - `countdown deadline -d 2015-07-18` will print out “2 days until 18 July 2015”
     - `countdown deadline -d 2015-07-18 -e weekend` will print out “2 days until weekend”.
+    - `countdown deadline -d 2015-07-18 -e weekend -w=True` will print out “2 weekdays until weekend”.
 
     If no argument is given, the default is for the method to post how many days till the
     next Christmas.
