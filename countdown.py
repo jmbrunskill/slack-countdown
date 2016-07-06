@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from flask.ext.script import Manager
 from flask import Flask
-from datetime import datetime
+from datetime import datetime,timedelta
 import json
 import os
 import requests
@@ -51,13 +51,13 @@ def weekdays_from_date(strdate):
     currentdate = datetime.today()
     futuredate = datetime.strptime(strdate, '%Y-%m-%d')
     delta = timedelta(days=1)
-    d = currentdate
     diff = 0
     weekend = set([5, 6])
-    while d <= end:
-        if d.weekday() not in weekend:
+
+    while currentdate <= futuredate:
+        if currentdate.weekday() not in weekend:
             diff += 1
-        d += delta
+        currentdate += delta
 
     return diff
 
@@ -66,9 +66,14 @@ def events(strdate,event,weekdays):
     """ Returns string to be displayed with the event mentioned. Sends an error
     if date is incorrect
     """
-    days = weekdays_from_date(strdate) if weekdays else days_from_date(strdate)
-    weekday_str = "week" if weekdays else  ""
 
+    days = days_from_date(strdate)
+    if weekdays:
+        days = weekdays_from_date(strdate)
+
+    weekday_str = ""
+    if weekdays:
+        weekday_str = "week"
 
     assert (days >= -2), "Date needs to be in the future"
     if days == -1:
@@ -145,8 +150,8 @@ def post_error():
                       metavar="DEADLINE")
 @manager.option("-e", "--event", dest="event",
                       help="Name of the deadline event",metavar="EVENT")
-@manager.option("-w", "--weekdays", dest="weekdays",
-                      help="Only include weekdays",metavar="WEEKDAYS")
+@manager.option("-w", "--weekdays", dest="weekdays", default=False,
+                      help="Only include weekdays")
 
 def deadline(date,event, weekdays):
     """ Method takes two optional arguments. Displays in slack channel
@@ -163,8 +168,10 @@ def deadline(date,event, weekdays):
         else:
             result = days_from_christmas()
     except:
+        #print("ERROR")
         post_error()
     else:
+        #print(result)
         post(result)
 
 
